@@ -28,7 +28,7 @@ const router = createHashRouter([
         <div className="flex container w-full md:w-1/2 flex-grow p-4 flex-row">
           <Button
             variant="ghost"
-            className="w-1/12 hover:bg-slate-950 hover:text-lg hover:transition-all"
+            className="hover:bg-slate-950 hover:text-lg hover:transition-all"
             onClick={() => window.history.back()}
           >
             <BiLeftArrow />
