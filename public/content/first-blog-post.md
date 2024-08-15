@@ -1,3 +1,5 @@
+![banner](../banner.jpeg)
+
 # First Blog Post
 
 Date: 2024-08-15
