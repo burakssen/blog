@@ -29,7 +29,9 @@ const router = createHashRouter([
           <Button
             variant="ghost"
             className="hover:bg-slate-950 hover:text-lg hover:transition-all pt-10"
-            onClick={() => window.history.back()}
+            onClick={() => {
+              window.location.href = "/blog/";
+            }}
           >
             <BiLeftArrow />
           </Button>
