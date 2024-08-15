@@ -19,6 +19,18 @@ const router = createHashRouter([
     ),
   },
   {
+    path: "/deneme",
+    element: (
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <div className="container w-full md:w-2/3 flex-grow p-4">
+          <h1>Deneme</h1>
+        </div>
+        <Footer />
+      </div>
+    ),
+  },
+  {
     path: "/blogpost/:id",
     element: (
       <div className="flex flex-col min-h-screen">
