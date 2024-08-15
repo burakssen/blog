@@ -19,7 +19,7 @@ const router = createHashRouter([
     ),
   },
   {
-    path: "/blog/blogpost/:id",
+    path: "/blogpost/:id",
     element: (
       <div className="flex flex-col min-h-screen">
         <Navbar />
