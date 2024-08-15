@@ -3,7 +3,7 @@ import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
 const Navbar = () => {
   return (
     <div className="flex p-3 space-x-4 justify-between border items-center">
-      <a href="/">Burak Şen</a>
+      <a href="/blog/">Burak Şen</a>
       <div className="flex space-x-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl">
         Personal Blog
       </div>

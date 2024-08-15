@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/blog/",
     element: (
       <div className="flex flex-col min-h-screen">
         <Navbar />
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "blogpost/:id",
+    path: "/blog/blogpost/:id",
     element: (
       <div className="flex flex-col min-h-screen">
         <Navbar />
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "*",
+    path: "/blog/*",
     element: (
       <div className="flex flex-col min-h-screen">
         <Navbar />
