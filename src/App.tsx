@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 
 const router = createHashRouter([
   {
-    path: "/blog",
+    path: "/",
     element: (
       <div className="flex flex-col min-h-screen">
         <Navbar />
