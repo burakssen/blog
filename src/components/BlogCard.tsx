@@ -21,7 +21,7 @@ const BlogCard = ({
     <Card>
       <CardHeader>
         <CardTitle className="flex justify-between">
-          <a href={`/blog/blogpost/${id}`}>{title}</a>
+          <a href={`/#/blogpost/${id}`}>{title}</a>
           <div className="text-sm">{date}</div>
         </CardTitle>
       </CardHeader>
