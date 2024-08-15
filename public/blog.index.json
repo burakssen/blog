@@ -1,0 +1,9 @@
+[
+    {
+        "id": "first-blog-post",
+        "title": "First Blog Post",
+        "description": "This is the first blog post that I am writing.",
+        "date": "2024-08-15",
+        "tags": ["first", "blog", "post"]
+    }
+]
