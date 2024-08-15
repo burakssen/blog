@@ -8,7 +8,7 @@ const Blog = () => {
 
   useEffect(() => {
     const getMarkdown = async () => {
-      const response = await fetch(`/content/${id}.md`);
+      const response = await fetch(`/blog/content/${id}.md`);
       const data: string = await response.text();
       const markedResult = await marked(data);
       setMarkdown(markedResult);

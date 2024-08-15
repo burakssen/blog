@@ -17,7 +17,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
-      const response = await fetch("/blog.index.json");
+      const response = await fetch("/blog/blog.index.json");
       const data = await response.json();
 
       // Map the response data to the BlogPost type
