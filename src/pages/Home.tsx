@@ -19,6 +19,7 @@ const Home: React.FC = () => {
     const fetchBlogPosts = async () => {
       const response = await fetch("/blog/blog.index.json");
       const data = await response.json();
+      data.reverse();
 
       // Map the response data to the BlogPost type
       const blogPosts = data.map((post: BlogPost) => ({

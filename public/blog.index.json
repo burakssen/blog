@@ -5,5 +5,12 @@
         "description": "This is the first blog post that I am writing.",
         "date": "2024-08-15",
         "tags": ["first", "blog", "post"]
+    },
+    {
+        "id": "boids-n-inversekinematics",
+        "title": "Boids and Inverse Kinematics Simulation",
+        "description": "An overview of the boids and inverse kinematics simulation that I created.",
+        "date": "2024-08-28",
+        "tags": ["boids", "inverse-kinematics", "simulation"]
     }
 ]

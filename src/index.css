@@ -72,5 +72,5 @@
   @apply prose dark:prose-invert
   prose-h1:font-bold prose-h1:text-4xl
   prose-a:text-blue-600 prose-p:text-justify prose-img:rounded-xl
-  prose-headings:m-0
+  prose-headings:m-0 !max-w-none
 }
