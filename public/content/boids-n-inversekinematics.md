@@ -160,3 +160,154 @@ Vector2 Boid::Separation(std::vector<std::shared_ptr<Boid>> &boids)
 This is the separation function of the boid class. Basically, it calculates the steering force that the boid should apply to avoid crowding local flockmates. It calculates the average of the difference vectors between the boid and its neighbors and normalizes it. Then it scales it to the maximum speed and subtracts the current velocity to get the steering force. Finally, it normalizes the result and scales it to the maximum force.
 
 With this function the boids will try to keep a small distance from each other.
+
+#### 2. Alignment
+
+```cpp
+Vector2 Boid::Align(std::vector<std::shared_ptr<Boid>> &boids)
+{
+    // Alignment: Steering towards the average heading of local flockmates
+
+    Vector2 sum = {0, 0};
+    int count = 0;
+
+    for (const auto &boid : boids)
+    {
+        float distance = Vector2Distance(this->m_position, boid->m_position);
+
+        // Check if the boid is within a certain range (you can experiment with this range)
+        if (distance > 0 && distance < 100 && boid != shared_from_this())
+        {
+            sum.x += boid->m_velocity.x;
+            sum.y += boid->m_velocity.y;
+            count++;
+        }
+    }
+
+    if (count > 0)
+    {
+        sum.x /= static_cast<float>(count);
+        sum.y /= static_cast<float>(count);
+
+        sum = Vector2Normalize(sum); // Normalize the result
+        sum.x *= m_maxSpeed;         // Scale to the maximum speed
+        sum.y *= m_maxSpeed;         // Scale to the maximum speed
+        sum.x -= m_velocity.x;       // Subtract current velocity to get steering force
+        sum.y -= m_velocity.y;       // Subtract current velocity to get steering force
+        sum = Vector2Normalize(sum); // Make sure the force does not exceed the maximum force
+        sum.x *= m_maxForce;
+        sum.y *= m_maxForce;
+    }
+
+    return sum;
+}
+```
+
+This is the alignment function of the boid class. Basically, it calculates the steering force that the boid should apply to align its velocity with the average velocity of its neighbors. It calculates the average of the velocities of the boid's neighbors and normalizes it. Then it scales it to the maximum speed and subtracts the current velocity to get the steering force. Finally, it normalizes the result and scales it to the maximum force.
+
+With this function the boids will try to align their velocity with the average velocity of their neighbors.
+
+#### 3. Cohesion
+
+```cpp
+Vector2 Boid::Cohesion(std::vector<std::shared_ptr<Boid>> &boids)
+{
+    // Cohesion: Steering to move towards the average position of local flockmates
+
+    Vector2 sum = {0, 0};
+    int count = 0;
+
+    for (const auto &boid : boids)
+    {
+        float distance = Vector2Distance(this->m_position, boid->m_position);
+
+        // Check if the boid is within a certain range (you can experiment with this range)
+        if (distance > 0 && distance < 100 && boid != shared_from_this())
+        {
+            sum.x += boid->m_position.x;
+            sum.y += boid->m_position.y;
+            count++;
+        }
+    }
+
+    if (count > 0)
+    {
+        sum.x /= static_cast<float>(count);
+        sum.y /= static_cast<float>(count);
+
+        Vector2 desired = Vector2Subtract(sum, this->m_position);
+        desired = Vector2Normalize(desired); // Normalize the result
+        desired.x *= m_maxSpeed;             // Scale to the maximum speed
+        desired.y *= m_maxSpeed;             // Scale to the maximum speed
+
+        Vector2 steering = Vector2Subtract(desired, m_velocity); // Calculate steering force
+        steering = Vector2Normalize(steering);                   // Make sure the force does not exceed the maximum force
+        steering.x *= m_maxForce;
+        steering.y *= m_maxForce;
+
+        return steering;
+    }
+
+    return sum;
+}
+```
+
+In this function, the boid calculates the steering force that it should apply to move towards the average position of its neighbors. It calculates the average position of the boid's neighbors and normalizes it. Then it scales it to the maximum speed and subtracts the current velocity to get the steering force. Finally, it normalizes the result and scales it to the maximum force.
+
+Boids will try to move towards the average position of their neighbors with this function.
+
+<img src="images/boids.gif" style="width:100%"></img>
+
+This is the result of the boids simulation. As you can see the boids are trying to keep a small distance from each other, align their velocity with the average velocity of their neighbors, and move towards the average position of their neighbors.
+
+And now let's move on to the inverse kinematics part and create our fishes from the boids.
+
+#### Inverse Kinematics (This part has a fishy implementation 😅)
+
+Now how the inverse kinematics work is a bit more complicated conseptually, but implementation-wise it's not that hard. I suggest you to watch the video that I have linked above to understand the concept of inverse kinematics.
+
+Creating fishes from inverse kinematics concept was a foreign idea to me until I have watched a [video](https://www.youtube.com/watch?v=qlfh_rv6khY&t=289s) from [@argonautcode](https://www.youtube.com/@argonautcode). The concept was pretty intruiging, so I have decided to implement and combine with my boids implementation.
+
+The main problem that I have faced was I couldn't create a coherent fish from the boids at first. I have only be able to create external points for main body of the fish, basically it was looking like an earth worm instead of a fish. I had to create a couple of utility functions to fill the body of the fish and create some fins from ellipses.
+
+But before that let's see how the inverse kinematics works.
+
+```cpp
+class Spine
+{
+public:
+    Spine(Vector2 origin, int jointCount, int linkSize, float angleConstraint = 2 * PI);
+    void Resolve(Vector2 pos);
+    void Draw();
+
+public:
+    std::vector<Vector2> m_joints;
+    std::vector<float> m_angles;
+    int m_linkSize;
+    float m_angleConstraint;
+};
+```
+
+This is the spine class that I have created for the inverse kinematics part. It has a vector of joints, angles, link size, and angle constraint. The joints are the points that the spine will be connected to. The angles are the angles between the joints.
+
+When the Resolve function is called the spine will try to resolve the position of the joints according to the given position by changing the angles between the joints.
+
+```cpp
+void Spine::Resolve(Vector2 pos)
+{
+    m_angles[0] = atan2f(pos.y - m_joints[0].y, pos.x - m_joints[0].x);
+    m_joints[0] = pos;
+    for (size_t i = 1; i < m_joints.size(); ++i)
+    {
+        float curAngle = atan2f(m_joints[i - 1].y - m_joints[i].y, m_joints[i - 1].x - m_joints[i].x);
+        m_angles[i] = ConstrainAngle(curAngle, m_angles[i - 1], m_angleConstraint);
+        m_joints[i] = Vector2Subtract(m_joints[i - 1], Vector2Scale((Vector2){cosf(m_angles[i]), sinf(m_angles[i])}, m_linkSize));
+    }
+}
+```
+
+This is the Resolve function of the spine class. It calculates the angles between the joints and the position of the joints according to the given position. It calculates the angle between the first joint and the given position and sets the first joint to the given position. Then it calculates the angles between the other joints and the position of the joints according to the previous joint.
+
+This is the main idea of the inverse kinematics. The spine will try to resolve the position of the joints according to the given position by changing the angles between the joints.
+
+#### Now the fun part: Creating the fish

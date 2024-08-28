@@ -26,7 +26,9 @@ const Blog = () => {
     const getMarkdown = async () => {
       const response = await fetch(`/blog/content/${id}.md`);
       const data: string = await response.text();
-      const markedResult = await marked.parse(data);
+      const markedResult = await marked.parse(data, {
+        gfm: true,
+      });
       setMarkdown(markedResult);
     };
     getMarkdown();
@@ -44,7 +46,7 @@ const Blog = () => {
   }, []);
 
   return (
-    <div className="markdown sm:w-4/6 w-full ">
+    <div className="markdown md:w-4/6 w-full ">
       <div className="" dangerouslySetInnerHTML={{ __html: markdown }} />
       {showScrollButton && (
         <Button
