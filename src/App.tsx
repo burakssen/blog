@@ -25,7 +25,7 @@ const router = createHashRouter([
     element: (
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <div className="flex w-1/2 md:w-screen flex-grow p-4 flex-row">
+        <div className="flex w-screen flex-grow p-4 flex-row">
           <Button
             variant="ghost"
             className="w-1/6 hover:bg-slate-950 hover:text-lg hover:transition-all pt-10"
