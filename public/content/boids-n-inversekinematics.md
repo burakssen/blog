@@ -2,6 +2,8 @@
 
 # My Boids and Inverse Kinematics Visualization
 
+Date: 2024-08-28
+\
 As usual when I'm bored and in search of a new project to create, instead of studying for my exams, I have stumbled upon the topics of [boids (flocking simulation)](https://www.youtube.com/watch?v=mhjuuHl6qHM) and [inverse kinematics](https://www.youtube.com/watch?v=hbgDqyy8bIw&t=1686s) from [@TheCodingTrain](https://www.youtube.com/@TheCodingTrain), and thought why not combine them into one project and create a a simple fish tank simulation. I mean how hard could it be, right?
 
 ## Setting up the project
@@ -262,7 +264,7 @@ This is the result of the boids simulation. As you can see the boids are trying 
 
 And now let's move on to the inverse kinematics part and create our fishes from the boids.
 
-#### Inverse Kinematics (This part has a fishy implementation 😅)
+### Inverse Kinematics (This part has a fishy implementation 😅)
 
 Now how the inverse kinematics work is a bit more complicated conseptually, but implementation-wise it's not that hard. I suggest you to watch the video that I have linked above to understand the concept of inverse kinematics.
 
