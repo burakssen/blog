@@ -51,7 +51,7 @@ const Blog = () => {
       {showScrollButton && (
         <Button
           variant="ghost"
-          className="fixed right-12 bottom-36 hover:bg-slate-950 pt-10"
+          className="fixed right-12 bottom-36 pt-10 hover:bg-transparent"
           onClick={() => {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
