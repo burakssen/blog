@@ -44,7 +44,7 @@ const Blog = () => {
   }, []);
 
   return (
-    <div className="markdown w-4/6 ">
+    <div className="markdown sm:w-4/6 w-full ">
       <div className="" dangerouslySetInnerHTML={{ __html: markdown }} />
       {showScrollButton && (
         <Button
