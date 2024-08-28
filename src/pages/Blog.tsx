@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { BiUpArrowCircle } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
@@ -30,11 +32,32 @@ const Blog = () => {
     getMarkdown();
   }, [id]);
 
+  const [showScrollButton, setShowScrollButton] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollButton(window.scrollY > 300); // Adjust scroll position threshold as needed
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div
-      className="markdown w-2/3 container"
-      dangerouslySetInnerHTML={{ __html: markdown }}
-    />
+    <div className="markdown w-4/6 ">
+      <div className="" dangerouslySetInnerHTML={{ __html: markdown }} />
+      {showScrollButton && (
+        <Button
+          variant="ghost"
+          className="fixed right-12 bottom-36 hover:bg-slate-950 pt-10"
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
+          <BiUpArrowCircle className="mr-2 text-3xl hover:text-4xl hover:transition-all" />
+        </Button>
+      )}
+    </div>
   );
 };
 

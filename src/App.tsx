@@ -5,7 +5,7 @@ import Blog from "@/pages/Blog";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "./components/ui/button";
-import { BiLeftArrow } from "react-icons/bi";
+import { BiLeftArrow, BiUpArrowCircle } from "react-icons/bi";
 
 const router = createHashRouter([
   {
@@ -25,15 +25,15 @@ const router = createHashRouter([
     element: (
       <div className="flex flex-col min-h-screen">
         <Navbar />
-        <div className="flex w-1/2 md:w-full flex-grow p-4 flex-row">
+        <div className="flex w-1/2 md:w-screen flex-grow p-4 flex-row">
           <Button
             variant="ghost"
-            className="hover:bg-slate-950 hover:text-lg hover:transition-all pt-10"
+            className="w-1/6 hover:bg-slate-950 hover:text-lg hover:transition-all pt-10"
             onClick={() => {
               window.location.href = "/blog/";
             }}
           >
-            <BiLeftArrow />
+            <BiLeftArrow className="mr-2" /> Go Back
           </Button>
           <Blog />
         </div>
