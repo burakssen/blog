@@ -5,7 +5,7 @@ import Blog from "@/pages/Blog";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "./components/ui/button";
-import { BiLeftArrow, BiUpArrowCircle } from "react-icons/bi";
+import { BiLeftArrow } from "react-icons/bi";
 
 const router = createHashRouter([
   {

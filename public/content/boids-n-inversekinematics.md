@@ -160,9 +160,3 @@ Vector2 Boid::Separation(std::vector<std::shared_ptr<Boid>> &boids)
 This is the separation function of the boid class. Basically, it calculates the steering force that the boid should apply to avoid crowding local flockmates. It calculates the average of the difference vectors between the boid and its neighbors and normalizes it. Then it scales it to the maximum speed and subtracts the current velocity to get the steering force. Finally, it normalizes the result and scales it to the maximum force.
 
 With this function the boids will try to keep a small distance from each other.
-
-#### 2. Alignment
-
-```cpp
-
-```
