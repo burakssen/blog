@@ -312,4 +312,10 @@ This is the Resolve function of the spine class. It calculates the angles betwee
 
 This is the main idea of the inverse kinematics. The spine will try to resolve the position of the joints according to the given position by changing the angles between the joints.
 
+<video width="100%" controls>
+  <source src="videos/inversekinematics.mov" type="video/mp4">
+</video>
+
+This is a simple example of the inverse kinematics. As you can see the spine is trying to resolve the position of the joints according to the given position by changing the angles between the joints.
+
 #### Now the fun part: Creating the fish
