@@ -319,3 +319,136 @@ This is the main idea of the inverse kinematics. The spine will try to resolve t
 This is a simple example of the inverse kinematics. As you can see the spine is trying to resolve the position of the joints according to the given position by changing the angles between the joints.
 
 #### Now the fun part: Creating the fish
+
+This part was a bit tricky to implement because on raylib api there was no function to draw filled ellipses with angles. So I had to create a function to draw filled ellipses with angles.
+
+```cpp
+static void FillPolygon(const std::vector<Vector2> &polygon, Color color)
+{
+    if (polygon.size() < 3)
+        return; // Not a polygon
+
+    // Determine the bounding box of the polygon
+    float minX = std::numeric_limits<float>::max();
+    float maxX = std::numeric_limits<float>::lowest();
+    float minY = std::numeric_limits<float>::max();
+    float maxY = std::numeric_limits<float>::lowest();
+
+    for (const auto &v : polygon)
+    {
+        minX = std::min(minX, v.x);
+        maxX = std::max(maxX, v.x);
+        minY = std::min(minY, v.y);
+        maxY = std::max(maxY, v.y);
+    }
+
+    // Scanline fill algorithm
+    for (int y = static_cast<int>(minY); y <= static_cast<int>(maxY); ++y)
+    {
+        std::vector<int> intersections;
+
+        // Find intersections of the scanline with polygon edges
+        for (size_t i = 0; i < polygon.size(); ++i)
+        {
+            size_t j = (i + 1) % polygon.size();
+            const Vector2 &v0 = polygon[i];
+            const Vector2 &v1 = polygon[j];
+
+            if ((v0.y > y && v1.y <= y) || (v1.y > y && v0.y <= y))
+            {
+                float x = v0.x + (y - v0.y) * (v1.x - v0.x) / (v1.y - v0.y);
+                intersections.push_back(static_cast<int>(x));
+            }
+        }
+
+        // Sort intersections and fill between pairs of intersections
+        std::sort(intersections.begin(), intersections.end());
+
+        // Use drawpixel
+
+        for (size_t i = 0; i < intersections.size(); i += 2)
+        {
+            int x0 = std::max(static_cast<int>(minX), intersections[i]);
+            int x1 = std::min(static_cast<int>(maxX), intersections[i + 1]);
+            for (int x = x0; x <= x1; ++x)
+            {
+                DrawPixel(x, y, color);
+            }
+        }
+    }
+}
+```
+
+This is the FillPolygon function that I have created to draw any polygon with a given color. It uses the scanline fill algorithm to fill the polygon.
+
+```cpp
+#define NUM_SEGMENTS 30
+
+static void DrawFilledEllipse(Vector2 center, Vector2 radius, float angle, Color color)
+{
+    // Number of segments to approximate the ellipse
+    const int segments = NUM_SEGMENTS;
+
+    // Create an array to store the vertices of the ellipse
+    std::vector<Vector2> vertices(segments + 1);
+
+    // Compute angle increment for each segment
+    float angleIncrement = 2.0f * PI / segments;
+
+    // Calculate vertices
+    for (int i = 0; i < segments; ++i)
+    {
+        float theta = angleIncrement * i;
+        Vector2 point = {
+            center.x + radius.x * cosf(theta),
+            center.y + radius.y * sinf(theta)};
+
+        // Rotate the point around the center
+        Vector2 pointRel = Vector2Subtract(point, center);
+        pointRel = Vector2Rotate(pointRel, angle);
+        vertices[i] = Vector2Add(center, pointRel);
+    }
+
+    // Close the fan loop by repeating the first vertex
+    vertices[segments] = vertices[0];
+
+    FillPolygon(vertices, color);
+}
+```
+
+Now on here, I have created the DrawFilledEllipse function to draw a filled ellipse with a given center, radius, angle, and color. It calculates the vertices of the ellipse and fills the ellipse with the FillPolygon function.
+
+With these functions, I can easily create a body and fins fot the fish.
+
+```cpp
+void Fish::Draw()
+{
+    DrawVentralFins(m_spine.m_joints[0], m_spine.m_angles[0], m_bodyWidth[0], m_finColor);
+    DrawPectoralFins(m_spine.m_joints[1], m_spine.m_angles[1], m_bodyWidth[1], m_finColor);
+    DrawBody(m_spine.m_joints, m_spine.m_angles);
+    DrawEyes(m_spine.m_joints[0], m_spine.m_angles[0], m_bodyWidth[0], m_finColor);
+    DrawDorsalFin(m_spine.m_joints[0], m_spine.m_angles[0], m_bodyWidth[0], m_finColor);
+}
+
+void Fish::DrawPectoralFins(const Vector2 &position, float angle, float m_bodyWidth, Color color)
+{
+    DrawFilledEllipse({position.x - cosf(angle) * m_bodyWidth / 6 + sinf(angle) * m_bodyWidth / 2, position.y - sinf(angle) * m_bodyWidth / 6 - cosf(angle) * m_bodyWidth / 2}, {7.5, 12.5}, angle - PI / 8, color);
+    DrawFilledEllipse({position.x - cosf(angle) * m_bodyWidth / 6 - sinf(angle) * m_bodyWidth / 2, position.y - sinf(angle) * m_bodyWidth / 6 + cosf(angle) * m_bodyWidth / 2}, {7.5, 12.5}, angle + PI / 8, color);
+    Vector2 jointPos = m_spine.m_joints[m_spine.m_joints.size() - 8];
+    float jointAngle = m_spine.m_angles[m_spine.m_joints.size() - 8];
+    DrawFilledEllipse({jointPos.x + cosf(jointAngle) * m_bodyWidth / 6 + sinf(jointAngle) * m_bodyWidth / 2, jointPos.y + sinf(jointAngle) * m_bodyWidth / 6 - cosf(jointAngle) * m_bodyWidth / 2}, {3, 5}, jointAngle - PI / 4, color);
+    DrawFilledEllipse({jointPos.x + cosf(jointAngle) * m_bodyWidth / 6 - sinf(jointAngle) * m_bodyWidth / 2, jointPos.y + sinf(jointAngle) * m_bodyWidth / 6 + cosf(jointAngle) * m_bodyWidth / 2}, {3, 5}, jointAngle + PI / 4, color);
+}
+```
+
+Now if we look at these two function Draw and DrawPectoralFins, we can see that I have created the body, eyes, dorsal fin, and pectoral fins of the fish. I have used the DrawFilledEllipse function to draw the fins and body of the fish. Also the angle of the fins and body are calculated according to the spine of the fish.
+
+<video width="100%" controls>
+  <source src="videos/fishes.mov" type="video/mp4">
+</video>
+
+This is the result of the fish simulation. As you can see the fish is created from the boids and inverse kinematics. The fish has a body, eyes, dorsal fin, and pectoral fins. The body and fins are created from the spine and the spine of the fish is created from the inverse kinematics.
+
+# Conclusion
+
+This was a fun project to create. I have learned a lot about boids and inverse kinematics. I have also learned how to create a fish from the boids and inverse kinematics. I hope you have enjoyed reading this article as much as I have enjoyed creating this project. If you have any questions or suggestions feel free to ask.
