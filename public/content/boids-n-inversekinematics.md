@@ -449,6 +449,8 @@ Now if we look at these two function Draw and DrawPectoralFins, we can see that 
 
 This is the result of the fish simulation. As you can see the fish is created from the boids and inverse kinematics. The fish has a body, eyes, dorsal fin, and pectoral fins. The body and fins are created from the spine and the spine of the fish is created from the inverse kinematics.
 
+You can also find the live project on here: [Boids](https://burakssen.com/boids/)
+
 # Conclusion
 
 This was a fun project to create. I have learned a lot about boids and inverse kinematics. I have also learned how to create a fish from the boids and inverse kinematics. I hope you have enjoyed reading this article as much as I have enjoyed creating this project. If you have any questions or suggestions feel free to ask.
