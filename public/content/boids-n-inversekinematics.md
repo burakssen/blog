@@ -54,7 +54,7 @@ App::App()
 }
 ```
 
-On the constructor of the `App` class I basically initialized the window and the boids vector with 50 boids. Probably my because of my implementation of this is not the best I had to use 50 as a starting point. (I think inverse kinematics part takes a lot of performance so I had to limit the number of boids)
+On the constructor of the `App` class I basically initialized the window and the boids vector with 50 boids. Probably because of my implementation of this is not the best I had to use 50 as a starting point. (I think inverse kinematics part takes a lot of performance so I had to limit the number of boids)
 
 ```cpp
 void App::Run()
