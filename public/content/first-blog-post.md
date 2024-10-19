@@ -1,4 +1,4 @@
-![banner](./images/first-blog-post_banner.png)
+<img width="100%" src="images/first-blog-post_banner.png" />
 
 # First Blog Post
 
